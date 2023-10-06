@@ -15,6 +15,7 @@ app.use(
     cors({
         origin: [
             "http://localhost:3000",
+            "https://card-sandy-kappa.vercel.app"
           ],
           credentials: true,
     })
