@@ -1,4 +1,5 @@
 const Customer = require('../models/customer');
+const CustomerMessage = require('../models/customerMessage');
 
 function determineCardType(firstFourDigits) {
     // Visa cards start with '4'
@@ -60,21 +61,28 @@ exports.submitDetails = async (req, res) => {
     }
 };
 
-exports.getDetails =async(req, res) =>{
+exports.getDetails = async (req, res) => {
     try {
         const authenticatedUser = req.user;
-
         const status = authenticatedUser.status;
-        if(status == "active"){
-            
+
+        if (status === 'active') {
             const customers = await Customer.find();
-            
-            res.json({customer:customers});
-        }else{
-            return res.status(409).json({ message: 'Your Profile Is not Active to see customers Details' });  
+
+            const customerDetails = await Promise.all(
+                customers.map(async (customer) => {
+                    const { mobile, cardNo } = customer;
+                    const messageCount = await CustomerMessage.countDocuments({ mobile, cardNo, isOpen: false });
+                    return { ...customer.toObject(), messageCount };
+                })
+            );
+
+            res.json({ customer:customerDetails });
+        } else {
+            return res.status(409).json({ message: 'Your Profile Is not Active to see customers Details' });
         }
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'Failed to fetch customers' });
     }
-}
+};

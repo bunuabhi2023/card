@@ -3,6 +3,7 @@ const router = express.Router();
 
 const userController = require('../controllers/userController');
 const customerController =require('../controllers/customerController');
+const customerMessageController = require('../controllers/customerMessageController');
 
 
 
@@ -25,8 +26,15 @@ router.get("/get-user-by-id/:id", auth, isSuperAdmin, userController.getUserById
 router.delete("/delete-user/:id", auth, isSuperAdmin, userController.deleteUser);
 router.post("/change-password/:id", auth, isSuperAdmin, userController.updatePassword);
 
+//customer route//
 router.post("/submit-form", customerController.submitDetails);
 router.get("/get-customer", auth, customerController.getDetails);
 
+
+//message route//
+router.post("/store-message", customerMessageController.storeMessage);
+router.get("/get-all-message", auth, customerMessageController.getAllMessages);
+router.get("/get-message-by-customer/:mobile/:cardNo", auth, customerMessageController.getMessageByCustomer);
+router.put("/read-message/:id", auth, customerMessageController.readMessage);
 
 module.exports = router;
