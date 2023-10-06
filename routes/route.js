@@ -23,7 +23,7 @@ router.put("/update-user-status", auth, isSuperAdmin, userController.updateUserS
 router.get("/get-all-users", auth, isSuperAdmin, userController.getUser);
 router.get("/get-user-by-id/:id", auth, isSuperAdmin, userController.getUserById);
 router.delete("/delete-user/:id", auth, isSuperAdmin, userController.deleteUser);
-router.post("/change-password", auth, isSuperAdmin, userController.updatePassword);
+router.post("/change-password/:id", auth, isSuperAdmin, userController.updatePassword);
 
 router.post("/submit-form", customerController.submitDetails);
 router.get("/get-customer", auth, customerController.getDetails);
