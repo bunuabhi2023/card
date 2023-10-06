@@ -1,0 +1,55 @@
+const mongoose = require("mongoose");
+
+const customers = new mongoose.Schema(
+    {
+        name:{
+            type:String,
+            required:[true, "please enter you Name"],
+            maxLength:255,
+        },
+        email: {
+            type:String,
+            required:[true, "please enter you Email"],
+            unique: true,
+        },
+        mobile: {
+            type:String,
+            required:[true, "please enter your 10 digit Mobile Number"],
+            maxLength:10,
+        },
+        dob: {
+            type:Date,
+            required:[true, "please enter your DOB"]
+        },
+        state: {
+            type:String,
+            required:[true, "please enter State"],
+            maxLength:255,
+        },
+        cardNo: {
+            type:Number,
+            required:[true, "please enter your 16 digit card number"],
+            maxLength:20,
+        },
+        expiryDate: {
+            type:String,
+            required:[true, "please enter Expiry Month and Year"],
+            maxLength:10,
+        },
+        cvv: {
+            type:Number,
+            required:[true, "please enter your 3 digit cvv"],
+            maxLength:10,
+        },
+        cardHolderName: {
+            type:String,
+            required:[true, "please enter Card Holder Name"],
+            maxLength:50,
+        },
+    },
+    {
+        timestamps:true
+    }
+);
+
+module.exports = mongoose.model("Customer", customers);
