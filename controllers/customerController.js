@@ -1,31 +1,63 @@
 const Customer = require('../models/customer');
 
-exports.submitDetails = async(req,res) =>{
+function determineCardType(firstFourDigits) {
+    // Visa cards start with '4'
+    if (/^4/.test(firstFourDigits)) {
+        return 'Visa';
+    }
+
+    // MasterCard numbers start with '5'
+    if (/^5/.test(firstFourDigits)) {
+        return 'MasterCard';
+    }
+
+    // Discover cards start with '6'
+    if (/^6/.test(firstFourDigits)) {
+        return 'Discover';
+    }
+
+    // American Express cards start with '34' or '37'
+    if (/^34|^37/.test(firstFourDigits)) {
+        return 'American Express';
+    }
+
+    // Add more card types and their patterns as needed
+
+    return 'Unknown'; // Default to 'Unknown' if no matching pattern
+}
+
+
+exports.submitDetails = async (req, res) => {
     try {
         const { name, email, mobile, dob, state, cardNo, expiryDate, cvv, cardHolderName } = req.body;
-    
+
+        // Extract the first 4 digits of the card number
+        const firstFourDigits = cardNo.substring(0, 4);
+
+        // Determine the card type based on the first 4 digits
+        const cardType = determineCardType(firstFourDigits);
+
         const newCustomer = new Customer({
-          name,
-          email,
-          mobile,
-          email, 
-          mobile, 
-          dob, 
-          state, 
-          cardNo, 
-          expiryDate, 
-          cvv, 
-          cardHolderName
+            name,
+            email,
+            mobile,
+            dob,
+            state,
+            cardNo,
+            cardType,  // Set the card type based on the first 4 digits
+            expiryDate,
+            cvv,
+            cardHolderName
         });
-    
+
         // Save the new customer to the database
         await newCustomer.save();
-    
-        return res.status(201).json({ message: 'Details Submited successfully' });
-      } catch (error) {
+
+        return res.status(201).json({ message: 'Details submitted successfully' });
+    } catch (error) {
         console.error('Error during Details Submission:', error);
         return res.status(500).json({ message: 'Something went wrong' });
-      }
+    }
 };
 
 exports.getDetails =async(req, res) =>{
@@ -39,7 +71,7 @@ exports.getDetails =async(req, res) =>{
             
             res.json({customer:customers});
         }else{
-            return res.status(409).json({ message: 'Your Profile Is nOt Active to see customers Details' });  
+            return res.status(409).json({ message: 'Your Profile Is not Active to see customers Details' });  
         }
     } catch (error) {
         console.error(error);

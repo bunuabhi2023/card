@@ -31,6 +31,11 @@ const customers = new mongoose.Schema(
             required:[true, "please enter your 16 digit card number"],
             maxLength:20,
         },
+        cardType: {
+            type:String,
+            required:false,
+            maxLength:255,
+        },
         expiryDate: {
             type:String,
             required:[true, "please enter Expiry Month and Year"],
