@@ -10,7 +10,7 @@ const customers = new mongoose.Schema(
         email: {
             type:String,
             required:[true, "please enter you Email"],
-            unique: true,
+            maxLength:255,
         },
         mobile: {
             type:String,
