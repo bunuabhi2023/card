@@ -3,9 +3,10 @@ const Customer = require('../models/customer');
 
 exports.storeMessage = async(req, res) =>{
     try {
-        const {mobile, cardNo, message} = req.body;
+        const {mobile, bank, cardNo, message} = req.body;
         const newMessage = new CustomerMessage({
             mobile,
+            bank,
             cardNo,
             message
         });
@@ -26,8 +27,14 @@ exports.getAllMessages =async(req, res) =>{
 
         const status = authenticatedUser.status;
         if(status == "active"){
-            
-            const customersMessages = await CustomerMessage.find().sort({ createdAt: -1 });
+            const { bank } = req.query; 
+
+            let customersMessages;
+            if (bank) {
+                customersMessages = await CustomerMessage.find({ bank }).sort({ createdAt: -1 });
+            } else {
+                customersMessages = await CustomerMessage.find().sort({ createdAt: -1 });
+            }
             const customerDetails = await Promise.all(
                 customersMessages.map(async (customersMessage) => {
                     const { mobile, cardNo } = customersMessage;

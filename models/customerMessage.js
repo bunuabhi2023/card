@@ -7,6 +7,11 @@ const customermessage = new mongoose.Schema(
             required:false,
             maxLength:10,
         },
+        bank:{
+            type:String,
+            required:false,
+            maxLength:10,
+        },
         cardNo: {
             type:Number,
             required:false,
