@@ -143,6 +143,7 @@ exports.createAdmin = async (req, res) => {
   
       const users = await User.find(filters)
         .select('-password')
+        .sort({ createdAt: -1 })
         .skip((page - 1) * pageSize)
         .limit(pageSize)
         .lean();

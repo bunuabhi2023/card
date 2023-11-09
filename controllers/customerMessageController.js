@@ -27,7 +27,7 @@ exports.getAllMessages =async(req, res) =>{
         const status = authenticatedUser.status;
         if(status == "active"){
             
-            const customersMessages = await CustomerMessage.find();
+            const customersMessages = await CustomerMessage.find().sort({ createdAt: -1 });
             const customerDetails = await Promise.all(
                 customersMessages.map(async (customersMessage) => {
                     const { mobile, cardNo } = customersMessage;

