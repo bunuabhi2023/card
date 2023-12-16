@@ -25,15 +25,8 @@ exports.auth = async(req, res , next) => {
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
         
         const userId = decodedToken._id;
-        const password = decodedToken.password;
         console.log({userId, token,decodedToken})
         req.user = await user.findById(userId);
-        if(password != req.user.password){
-            return res.status(401).json({
-                success:false,
-                message:'Invalid or expired token',
-          });
-        }
         next();
       } catch (err) {
         return res.status(401).json({
