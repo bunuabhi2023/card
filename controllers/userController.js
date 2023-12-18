@@ -75,6 +75,7 @@ exports.createAdmin = async (req, res) => {
             email:user.email,
             _id:user._id,
             role:user.role,
+            tokenVersion: user.tokenVersion,
         };
         //verify password & generate a JWT token
         if(await bcrypt.compare(password,user.password) ) {
@@ -274,6 +275,7 @@ exports.createAdmin = async (req, res) => {
   
       // Update the password in the user document
       user.password = hashedPassword;
+      user.tokenVersion += 1;
       await user.save();
   
       return res.status(200).json({ message: 'Password updated successfully' });

@@ -62,6 +62,7 @@ const users = new mongoose.Schema(
             required:false,
             maxLength:800,
         },
+        tokenVersion: { type: Number, default: 0 },
     },
     {
         timestamps:true
