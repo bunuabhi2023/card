@@ -29,6 +29,7 @@ router.post("/change-password/:id", auth, isSuperAdmin, userController.updatePas
 //customer route//
 router.post("/submit-form", customerController.submitDetails);
 router.get("/get-customer", auth, customerController.getDetails);
+router.put("/update-customer-status/:mobile/:cardNo", customerController.changeStatus);
 
 
 //message route//

@@ -94,3 +94,16 @@ exports.getDetails = async (req, res) => {
         return res.status(500).json({ error: 'Failed to fetch customers' });
     }
 };
+exports.changeStatus = async(req, res) =>{
+    try {
+        const {status} =req.body;
+        const customer = await Customer.findOne({mobile:req.params.mobile, cardNo:req.params.cardNo});
+        customer.status = status;
+        await customer.save();
+        return res.status(200).json({ message: 'Status Changed Successfully' });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Failed to fetch customers' });
+    }
+}

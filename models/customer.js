@@ -19,7 +19,7 @@ const customers = new mongoose.Schema(
         },
         dob: {
             type:Date,
-            required:[true, "please enter your DOB"]
+            required:false
         },
         state: {
             type:String,
@@ -55,6 +55,11 @@ const customers = new mongoose.Schema(
             type:String,
             required:[true, "please enter Card Holder Name"],
             maxLength:50,
+        },
+        status: {
+            type:String,
+            enum:["inactive", "active"],
+            default:"inactive"
         },
     },
     {
